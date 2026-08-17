@@ -9,7 +9,7 @@ export default function Loading() {
                 icon="svg-spinners:blocks-wave"
                 width="30"
                 height="30"
-                style={{ color: "#009B97" }}
+                style={{ color: "#348cd4" }}
             />
             <span>{t("Loading")}...</span>
         </div>

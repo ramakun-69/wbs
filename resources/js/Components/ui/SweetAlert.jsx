@@ -1,7 +1,7 @@
 import { t } from 'i18next';
 import Swal from 'sweetalert2'
-import 'animate.css';
 import 'sweetalert2/dist/sweetalert2.min.css'
+import "animate.css";
 
 const basicAlert = (title, text, icon) => {
     Swal.fire({

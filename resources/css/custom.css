@@ -46,3 +46,22 @@
 
     pointer-events:all;
 }
+
+/* Keep the full template logo in the topbar on small screens. */
+@media (max-width: 767.98px) {
+    .app-topbar .logo .logo-lg {
+        display: flex;
+    }
+
+    .app-topbar .logo .logo-sm {
+        display: none;
+    }
+}
+
+/* Mobile sidebar backdrop: keep it below the drawer and above all page content. */
+.dashboard-sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1040;
+    background-color: rgba(30, 32, 35, 0.35);
+}

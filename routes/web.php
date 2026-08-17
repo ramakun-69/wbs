@@ -1,13 +1,13 @@
 <?php
 
 use App\Http\Controllers\Auth\SsoController;
+use App\Http\Controllers\LocalizationController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('guest')->group(function () {
-    Route::get('/auth/sso/redirect', [SsoController::class, 'redirect'])->name('sso.redirect');
-    Route::get('/auth/sso/callback', [SsoController::class, 'callback'])->name('sso.callback');
-});
+
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/set-language', LocalizationController::class)->name('set-language');

@@ -36,12 +36,13 @@ class HandleInertiaRequests extends Middleware
   
     public function share(Request $request): array
     {
+        $user = $request->user();
     
         return [
             ...parent::share($request),
 
             'auth' => [
-                'user' => $request->user() ? $request->user()->only([
+                'user' => $user ? $user->only([
                         'id',
                         'simpeg_user_id',
                         'username',
@@ -50,6 +51,8 @@ class HandleInertiaRequests extends Middleware
                         'auth_type',
                         'is_active',
                     ]) : null,
+                'roles' => $user ? $user->getRoleNames()->values()->all() : [],
+                'permissions' => $user ? $user->getAllPermissions()->pluck('name')->values()->all() : [],
             ],
 
             'flash' => [

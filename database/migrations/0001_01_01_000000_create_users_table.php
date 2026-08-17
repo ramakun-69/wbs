@@ -18,8 +18,8 @@ return new class extends Migration
                 ->unique();
             $table->string('auth_type')->default('sso')->index();
             $table->string('username')->nullable();
-            $table->string('name');
-            $table->string('email')->nullable();
+            $table->string('name')->nullable();
+            $table->string('email');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->boolean('is_active')->default(true);

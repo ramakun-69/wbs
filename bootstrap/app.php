@@ -14,8 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         then: function () {
         Route::middleware('web')
-            // ->group(base_path('routes/datatable.php'))
-            // ->group(base_path('routes/trash.php'))
+            ->group(base_path('routes/datatable.php'))
             ->group(base_path('routes/dashboard.php'))
             ->group(base_path('routes/auth.php'));
     }

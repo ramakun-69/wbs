@@ -13,11 +13,17 @@ import "./csrf.js";
 import "./i18n.js";
 import i18n from "./i18n";
 import { route } from "ziggy-js";
+import { Ziggy } from "./ziggy";
 import "../css/datatable.css";
 import "../css/custom.css";
 import "./axios";
 import { hideLoading, showLoading } from "./Services/LoadingService.jsx";
 import GlobalLoading from "./Components/ui/GlobalLoading.jsx";
+
+// Expose Ziggy's route helper to all Inertia page components.
+globalThis.route = (name, params, absolute = true) =>
+    route(name, params, absolute, Ziggy);
+
 if (typeof window !== "undefined") {
     import("bootstrap/dist/js/bootstrap.bundle.js");
 }

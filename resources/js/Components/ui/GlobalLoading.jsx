@@ -8,7 +8,7 @@ export default function GlobalLoading() {
 
     return (
         <div className="global-loading">
-            {/* <div className="spinner-border text-mint" /> */}
+            {/* Loading overlay handled by the layout */}
         </div>
     );
 }

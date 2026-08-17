@@ -1,5 +1,8 @@
 export default {
     translation: {
+        menu: {
+            navigation: "Navigasi", dashboard: "Dasbor", complaints: "Pengaduan", my_complaints: "Pengaduan Saya", create_complaint: "Buat Pengaduan", incoming_complaints: "Pengaduan Masuk", register_complaint: "Registrasi Pengaduan", complaint_reports: "Laporan Pengaduan", users: "Daftar User", categories: "Kategori", articles: "Artikel", faq: "FAQ", support: "Support", support_list: "Daftar Support", create_support: "Input Support", manage_support: "Kelola Support", verify_substance: "Verifikasi Substansi", incoming_reports: "Laporan Masuk", assignment_letter: "Penerbitan SK", investigation_review: "Reviu Hasil Investigasi", my_cases: "Kasus Saya", investigation: "Investigasi", investigation_section: "Investigasi", recommendations: "Hasil & Rekomendasi", recommendation_approval: "Persetujuan Rekomendasi", reports: "Laporan", account: "Akun", profile: "Profil Saya", management: "Manajemen"
+        },
         Welcome: "Selamat datang",
         Goodbye: "Selamat tinggal",
         Email: "Email",
@@ -333,7 +336,7 @@ export default {
         "Training Report" : "Laporan Diklat",
         "Username Or Email" : "Nama Pengguna Atau Email",
        
-        "Add New :attribute" : "Tambah {{attribute}} Baru",
+        "Add New Attribute" : "Tambah {{attribute}} Baru",
         "Add :attribute" : "Tambah {{attribute}}",
         "Update :attribute" : "Perbarui {{attribute}}",
         "Search :attribute" : "Cari {{attribute}}",
@@ -351,6 +354,13 @@ export default {
         "Log in using SIMPEG SSO." : "Login menggunakan SSO SIMPEG",
         "Reporter" : "Pelapor",
         "Register An Account" : "Daftar Akun",
-        "Don't have an account yet?" : "Belum Memiliki Akun?"
+        "Don't have an account yet?" : "Belum Memiliki Akun?",
+        "Profile" : "Profil",
+        "Logout" : "Keluar",
+        "Reporter Account Register" : "Registrasi Akun Pelapor",
+        "Create an account to submit a report." : "Buat akun untuk menyampaikan laporan.",
+        "Already have an account?" : "Sudah memiliki akun?",
+        "Register" :"Daftar",
+        "An unexpected error occurred. Please try again later." : "Terjadi kesalahan tak terduga. Silakan coba lagi nanti."
     }
 }

@@ -4,7 +4,7 @@
 .auth-information { padding: 2rem; }
 .auth-information h1 { max-width: 520px; }
 .auth-information .lead { max-width: 470px; color: rgba(255,255,255,.82); }
-.auth-mark { display: inline-flex; align-items: center; justify-content: center; min-width: 72px; height: 42px; padding: 0 .9rem; border-radius: .75rem; background: #e53935; color: #fff; font-weight: 800; letter-spacing: .08em; }
+.auth-mark { display: inline-flex; align-items: center; justify-content: center; min-width: 72px; height: 42px; padding: 1rem; border-radius: .75rem; background: #e53935; color: #fff; font-weight: 800; letter-spacing: .08em;margin-top: 100; }
 .auth-mark-mobile { display: none; }
 .auth-information-note { display: flex; align-items: center; gap: .7rem; max-width: 450px; padding: 1rem 1.1rem; border: 1px solid rgba(255,255,255,.28); border-radius: .9rem; background: rgba(255,255,255,.12); font-size: .9rem; }
 .auth-card { min-height: calc(100dvh - 2rem); border-radius: 0 1.5rem 1.5rem 0 !important; display: flex; align-items: center; }

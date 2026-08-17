@@ -4,10 +4,13 @@ return [
 
     'simpeg' => [
         'base_url' => env('SIMPEG_SSO_URL'),
-        'authorize_url' => env('SIMPEG_SSO_AUTHORIZE_URL', env('SIMPEG_SSO_URL').'/oauth/authorize'),
-        'token_url' => env('SIMPEG_SSO_TOKEN_URL', env('SIMPEG_SSO_URL').'/oauth/token'),
-        'user_url' => env('SIMPEG_SSO_USER_URL', env('SIMPEG_SSO_URL').'/api/user'),
-        'client_id' => env('OAUTH_CLIENT_ID'),
+          'authorize_url' => env('SIMPEG_SSO_AUTHORIZE_URL', env('SIMPEG_SSO_URL').'/oauth/authorize'),
+          'token_url' => env('SIMPEG_SSO_TOKEN_URL', env('SIMPEG_SSO_URL').'/oauth/token'),
+          'user_url' => env('SIMPEG_SSO_USER_URL', env('SIMPEG_SSO_URL').'/api/user'),
+          'users_token' => env('SIMPEG_SSO_USERS_TOKEN'),
+          'logout_url' => env('SIMPEG_SSO_LOGOUT_URL'),
+          'prompt' => env('SIMPEG_SSO_PROMPT', 'login'),
+          'client_id' => env('OAUTH_CLIENT_ID'),
         'client_secret' => env('OAUTH_CLIENT_SECRET'),
         'scope' => env('SIMPEG_SSO_SCOPE', ''),
     ],

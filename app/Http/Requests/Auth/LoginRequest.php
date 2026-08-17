@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class LoginRequest extends FormRequest
 {
+
+    protected $fields = ['email','password'];
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -18,7 +20,7 @@ class LoginRequest extends FormRequest
     {
         $trimmed = [];
 
-        foreach (array_keys($this->fields) as $field) {
+        foreach ($this->fields as $field) {
             if ($this->has($field)) {
                 $trimmed[$field] = is_string($this->input($field))
                     ? trim($this->input($field))
@@ -36,9 +38,8 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nik' => ['required', 'digits:16'],
+            'email' => ['required', 'email:dns'],
             'password' => ['required', 'string'],
-            'remember' => ['nullable', 'boolean'],
         ];
     }
 }

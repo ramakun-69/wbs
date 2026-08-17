@@ -31,6 +31,7 @@ export default forwardRef(function TextInput(
                 className={`form-control ${className} ${localError ? 'is-invalid' : ''}`}
                 ref={localRef}
                 onChange={handleChange}
+                autoComplete='off'
             />
             <ErrorMessage message={localError} className="mt-2 text-danger" />
         </>

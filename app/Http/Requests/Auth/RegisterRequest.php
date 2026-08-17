@@ -7,6 +7,11 @@ use Illuminate\Validation\Rule;
 
 class RegisterRequest extends FormRequest
 {
+    protected $fields = [
+        'password',
+        'password_confirmation',
+        'email',
+    ];
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -37,10 +42,9 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nik' => ['required', 'digits:16', Rule::unique('users', 'username')],
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['nullable', 'email:rfc', 'max:255', Rule::unique('users', 'email')],
+            'email' => ['required', 'email:dns', 'max:255', Rule::unique('users', 'email')],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password_confirmation' => ['required','string', 'min:8']
         ];
     }
 }

@@ -3,16 +3,19 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Services\Sso\SsoService;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Symfony\Component\HttpFoundation\Response;
 
 class SsoController extends Controller
 {
+    public function __construct(protected SsoService $ssoService)
+    {
+    }
+
     public function redirect(Request $request)
     {
         $state = Str::random(64);
@@ -30,6 +33,7 @@ class SsoController extends Controller
             'client_id' => config('services.simpeg.client_id'),
             'redirect_uri' => route('sso.callback'),
             'scope' => config('services.simpeg.scope'),
+            'prompt' => config('services.simpeg.prompt'),
             'state' => $state,
             'code_challenge' => $codeChallenge,
             'code_challenge_method' => 'S256',
@@ -88,7 +92,7 @@ class SsoController extends Controller
             }
 
             $identity = $identityResponse->json('data') ?: $identityResponse->json();
-            $user = $this->provisionUser($identity);
+            $user = $this->ssoService->provisionUser($identity);
 
             if (!$user->is_active) {
                 return redirect()->route('login')->with('error', 'Akun WBS Anda tidak aktif.');
@@ -106,27 +110,4 @@ class SsoController extends Controller
         }
     }
 
-    private function provisionUser(array $identity): User
-    {
-        $simpegUserId = $identity['id'] ?? $identity['user_id'] ?? null;
-
-        abort_unless($simpegUserId, Response::HTTP_UNPROCESSABLE_ENTITY, 'Identity SIMPEG tidak memiliki user id.');
-
-        return User::updateOrCreate(
-            ['simpeg_user_id' => (string) $simpegUserId],
-            [
-                'id' => (string) ($this->existingUserId($simpegUserId) ?: Str::uuid()),
-                'auth_type' => 'sso',
-                'username' => $identity['username'] ?? $identity['nip'] ?? $identity['nik'] ?? null,
-                'name' => $identity['name'] ?? $identity['full_name'] ?? 'Pengguna SIMPEG',
-                'email' => $identity['email'] ?? null,
-                'is_active' => true,
-            ],
-        );
-    }
-
-    private function existingUserId(string|int $simpegUserId): ?string
-    {
-        return User::where('simpeg_user_id', (string) $simpegUserId)->value('id');
-    }
 }

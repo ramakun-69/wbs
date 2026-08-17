@@ -5,26 +5,37 @@ import AuthLayout from "../../Layouts/AuthLayout";
 import TextInput from "../../Components/ui/TextInput";
 import Button from "../../Components/ui/Button";
 import "../../../css/auth/login.css";
+import { useTranslation } from "react-i18next";
 
 export default function Register() {
+    const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const { data, setData, post, processing, errors, clearErrors } = useForm({
-        name: "",
-        nik: "",
         email: "",
         password: "",
         password_confirmation: "",
     });
 
-    const submit = (event) => {
-        event.preventDefault();
-        post("/register");
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        post(route("register.store"), {
+            onSuccess: (page) => {
+                const error = page.props?.flash?.error;
+                const success = page.props?.flash?.success;
+                reset();
+                handleCloseModal();
+                if (error) notifyError(error, "bottom-center");
+                notifySuccess(success, "bottom-center");
+            },
+        });
     };
 
     const passwordField = (id, label, value, visible, setVisible, error) => (
         <div className="mb-3">
-            <label htmlFor={id} className="form-label">{label}</label>
+            <label htmlFor={id} className="form-label">
+                {label}
+            </label>
             <div className="password-field">
                 <TextInput
                     id={id}
@@ -35,17 +46,22 @@ export default function Register() {
                         clearErrors(id);
                         setData(id, event.target.value);
                     }}
+                    placeholder={t("Enter Attribute", {attribute : label})}
                     errorMessage={error}
                     autoComplete="new-password"
                 />
-                <button
+                <Button
                     type="button"
                     className="password-toggle"
                     onClick={() => setVisible((current) => !current)}
-                    aria-label={visible ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
+                    aria-label={
+                        visible
+                            ? "Sembunyikan kata sandi"
+                            : "Tampilkan kata sandi"
+                    }
                 >
                     {visible ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
+                </Button>
             </div>
         </div>
     );
@@ -53,72 +69,66 @@ export default function Register() {
     return (
         <AuthLayout>
             <div className="text-center mb-4">
-                <span className="auth-mark auth-mark-mobile">WBS</span>
-                <h2 className="fw-semibold mt-3 mb-2">Registrasi Pelapor</h2>
-                <p className="text-muted mb-0">Buat akun untuk menyampaikan laporan.</p>
+                <span className="auth-mark auth-mark-mobile">
+                    Whistleblowing System{" "}
+                </span>
+                <h2 className="fw-semibold mt-3 mb-2">
+                    {t("Reporter Account Register")}
+                </h2>
+                <p className="text-muted mb-0">
+                    {t("Create an account to submit a report.")}
+                </p>
             </div>
 
-            <form onSubmit={submit}>
-                <div className="mb-3">
-                    <label htmlFor="name" className="form-label">Nama lengkap</label>
-                    <TextInput
-                        id="name"
-                        className="form-control-lg bg-neutral-50 radius-12"
-                        value={data.name}
-                        onChange={(event) => {
-                            clearErrors("name");
-                            setData("name", event.target.value);
-                        }}
-                        errorMessage={errors.name}
-                        autoComplete="name"
-                    />
-                </div>
+            <div className="mb-3">
+                <label htmlFor="email" className="form-label">
+                    {t("Email")} <span className="text-muted"></span>
+                </label>
+                <TextInput
+                    id="email"
+                    type="email"
+                    className="form-control-lg bg-neutral-50 radius-12"
+                    value={data.email}
+                    onChange={(event) => {
+                        clearErrors("email");
+                        setData("email", event.target.value);
+                    }}
+                    placeholder={t("Enter Attribute", {attribute: t("Email")})}
+                    errorMessage={errors.email}
+                    autoComplete="email"
+                />
+            </div>
 
-                <div className="mb-3">
-                    <label htmlFor="nik" className="form-label">NIK</label>
-                    <TextInput
-                        id="nik"
-                        inputMode="numeric"
-                        className="form-control-lg bg-neutral-50 radius-12"
-                        value={data.nik}
-                        onChange={(event) => {
-                            clearErrors("nik");
-                            setData("nik", event.target.value.replace(/\D/g, "").slice(0, 16));
-                        }}
-                        errorMessage={errors.nik}
-                        autoComplete="off"
-                    />
-                </div>
+            {passwordField(
+                "password",
+                t("Password"),
+                data.password,
+                showPassword,
+                setShowPassword,
+                errors.password,
+            )}
+            {passwordField(
+                "password_confirmation",
+                t("Confirm Password"),
+                data.password_confirmation,
+                showConfirmation,
+                setShowConfirmation,
+                errors.password_confirmation,
+            )}
 
-                <div className="mb-3">
-                    <label htmlFor="email" className="form-label">
-                        Email <span className="text-muted">(opsional)</span>
-                    </label>
-                    <TextInput
-                        id="email"
-                        type="email"
-                        className="form-control-lg bg-neutral-50 radius-12"
-                        value={data.email}
-                        onChange={(event) => {
-                            clearErrors("email");
-                            setData("email", event.target.value);
-                        }}
-                        errorMessage={errors.email}
-                        autoComplete="email"
-                    />
-                </div>
+            <Button
+                type="button"
+                onClick={handleSubmit}
+                className="btn btn-primary btn-lg w-100"
+                isLoading={processing}
+            >
+                {t("Register")}
+            </Button>
 
-                {passwordField("password", "Kata sandi", data.password, showPassword, setShowPassword, errors.password)}
-                {passwordField("password_confirmation", "Konfirmasi kata sandi", data.password_confirmation, showConfirmation, setShowConfirmation, errors.password_confirmation)}
-
-                <Button type="submit" className="btn btn-primary btn-lg w-100" isLoading={processing}>
-                    Daftar
-                </Button>
-
-                <p className="text-center mt-4 mb-0 small text-muted">
-                    Sudah memiliki akun? <Link href="/login">Masuk</Link>
-                </p>
-            </form>
+            <p className="text-center mt-4 mb-0 small text-muted">
+                {t("Already have an account?")}{" "}
+                <Link href="/login">{t("Login")}</Link>
+            </p>
         </AuthLayout>
     );
 }

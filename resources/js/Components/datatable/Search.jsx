@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 
 export default function Search({ setSearch, search }) {
     const { t } = useTranslation();
-
+    
     return (
         <div className="d-flex justify-content-end mb-3">
             <input

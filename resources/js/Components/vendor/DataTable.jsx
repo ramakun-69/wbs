@@ -1,3 +1,3 @@
-import DataTableModule from "react-data-table-component/dist/index.cjs.js";
+import DataTable from "react-data-table-component";
 
-export default DataTableModule.default;
+export default DataTable;
