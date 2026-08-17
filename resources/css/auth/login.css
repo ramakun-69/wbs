@@ -1,0 +1,21 @@
+.auth-page { min-height: 100dvh; height: 100dvh; overflow: hidden; }
+.auth-shell { min-height: calc(100dvh - 2rem); max-width: 1440px; }
+.auth-aside { padding: 3rem; background: linear-gradient(145deg, #123f52 0%, #196a72 52%, #d7ebe9 100%); border-radius: 1.5rem 0 0 1.5rem; color: #fff; }
+.auth-information { padding: 2rem; }
+.auth-information h1 { max-width: 520px; }
+.auth-information .lead { max-width: 470px; color: rgba(255,255,255,.82); }
+.auth-mark { display: inline-flex; align-items: center; justify-content: center; min-width: 72px; height: 42px; padding: 0 .9rem; border-radius: .75rem; background: #e53935; color: #fff; font-weight: 800; letter-spacing: .08em; }
+.auth-mark-mobile { display: none; }
+.auth-information-note { display: flex; align-items: center; gap: .7rem; max-width: 450px; padding: 1rem 1.1rem; border: 1px solid rgba(255,255,255,.28); border-radius: .9rem; background: rgba(255,255,255,.12); font-size: .9rem; }
+.auth-card { min-height: calc(100dvh - 2rem); border-radius: 0 1.5rem 1.5rem 0 !important; display: flex; align-items: center; }
+.auth-card .card-body { width: 100%; max-width: auto; margin: 0 auto; }
+.login-type-selector { display: grid; grid-template-columns: repeat(2, 1fr); gap: .5rem; padding: .3rem; border-radius: .75rem; background: #f1f3f5; }
+.login-type-selector button { border: 0; border-radius: .55rem; padding: .75rem; background: transparent; color: #6c757d; font-weight: 600; }
+.login-type-selector button.active { background: #fff; color: #166275; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+.sso-login-panel { padding: 2rem 1rem; }
+.sso-icon { width: 64px; height: 64px; margin: 0 auto; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(22, 98, 117, .1); color: #166275; }
+.password-field { position: relative; }
+.password-field > .form-control { padding-right: 3rem !important; }
+.password-toggle { position: absolute; top: 24px; right: .9rem; z-index: 5; transform: translateY(-50%); display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; padding: 0; border: 0; background: transparent; color: #6c757d; cursor: pointer; }
+.password-toggle:hover, .password-toggle:focus { color: #166275; }
+@media (max-width: 991.98px) { .auth-page { height: auto; min-height: 100dvh; overflow: auto; } .auth-shell { min-height: auto; max-width: 560px; } .auth-card { min-height: auto; border-radius: 1.5rem !important; } .auth-card .card-body { max-width: none; } .auth-mark-mobile { display: inline-flex; } }

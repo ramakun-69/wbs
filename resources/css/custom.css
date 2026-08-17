@@ -1,0 +1,48 @@
+.dashboard-main.fullscreen {
+    margin-left: 0; /* hapus offset sidebar */
+    width: 100%;
+    transition: none; /* optional agar tidak ada animasi sisa */
+}
+
+/* Keep the sidebar header stable at every desktop width. */
+.sidebar-logo {
+    overflow: hidden;
+}
+
+.sidebar-logo img.light-logo,
+.sidebar-logo img.dark-logo {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 2.75rem;
+    object-fit: contain;
+}
+.react-select.is-invalid .select__control {
+    border-color: #009B97 !important;
+    box-shadow: 0 0 0 1px #009B97 !important;
+}
+
+.react-select .select__control--is-focused.is-invalid {
+    border-color: #009B97 !important;
+}
+
+
+.react-select-container.is-invalid .react-select__control {
+  border-color: red !important;
+  box-shadow: 0 0 0 0.1px red !important;
+}
+.global-loading{
+    position:fixed;
+    inset:0;
+
+    background:rgba(82, 82, 82, 0.253);
+
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    z-index:999999;
+
+    pointer-events:all;
+}

@@ -1,0 +1,14 @@
+/* Checkbox per baris */
+.rdt_TableBody > div > div:first-child input[type="checkbox"],
+.rdt_TableHead input[type="checkbox"] {
+    appearance: auto !important;
+    -webkit-appearance: checkbox !important;
+    -moz-appearance: checkbox !important;
+    display: inline-block !important;
+    position: static !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    width: 16px !important;
+    height: 16px !important;
+    accent-color: #009B97;
+}
