@@ -10,8 +10,7 @@ services:
     working_dir: /var/www/
     restart: unless-stopped
     tty: true
-    env_file:
-      - .env
+    
     volumes:
       - ./:/var/www/
     healthcheck:
@@ -43,8 +42,7 @@ services:
     image: wbs:latest
     working_dir: /var/www/
     restart: unless-stopped
-    env_file:
-      - .env
+    
     command: >
       php artisan queue:work redis
       --sleep=3
@@ -64,8 +62,7 @@ services:
     image: wbs:latest
     working_dir: /var/www/
     restart: unless-stopped
-    env_file:
-      - .env
+    
     command:
       - php
       - artisan
