@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Permission\Traits\HasRoles;
 
 #[Guarded([])]
@@ -36,5 +37,25 @@ class User extends Authenticatable
             'is_active' => 'boolean',
             'last_login_at' => 'datetime',
         ];
+    }
+
+    public function complaintReports(): HasMany
+    {
+        return $this->hasMany(ComplaintReporter::class);
+    }
+
+    public function assignedComplaints(): HasMany
+    {
+        return $this->hasMany(Complaint::class, 'assigned_to');
+    }
+
+    public function complaintAttachments(): HasMany
+    {
+        return $this->hasMany(ComplaintAttachment::class, 'uploaded_by');
+    }
+
+    public function complaintStatusChanges(): HasMany
+    {
+        return $this->hasMany(ComplaintStatusHistory::class, 'created_by');
     }
 }

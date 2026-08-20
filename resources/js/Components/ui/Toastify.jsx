@@ -2,7 +2,7 @@ import React from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const notifySuccess = (message, position = "bottom-right") => {
+const notifySuccess = (message, position = "bottom-center") => {
     toast.success(message, {
         position: position,
         autoClose: 1000,
@@ -25,7 +25,7 @@ const notifySuccess = (message, position = "bottom-right") => {
         },
     });
 };
-const notifyError = (message, position = "bottom-right") => {
+const notifyError = (message, position = "bottom-center") => {
     toast.error(message, {
         position: position,
         autoClose: 1000,
@@ -47,7 +47,7 @@ const notifyError = (message, position = "bottom-right") => {
         },
     });
 };
-const notifyInfo = (message, position = "bottom-right") => {
+const notifyInfo = (message, position = "bottom-center") => {
     toast.info(message, {
         position: position,
         autoClose: 1000,

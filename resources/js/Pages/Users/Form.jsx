@@ -1,42 +1,52 @@
-import AsyncSelect from "react-select/async";
+import Select from "react-select";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-export default function Form({
-    data,
-    setData,
-    errors,
-    selectedUser,
-    onUserChange,
-}) {
+export default function Form({data, setData, errors, selectedUser, onUserChange}) {
     const { t } = useTranslation();
+    const [users, setUsers] = useState([]);
+    const [isLoadingUsers, setIsLoadingUsers] = useState(true);
 
-    const loadUsers = async (inputValue) => {
-        if (inputValue.trim().length < 2) return [];
+    useEffect(() => {
+        let active = true;
 
-        const response = await axios.get(route("users.simpeg.search"), {
-            params: { search: inputValue },
-        });
+        axios
+            .get(route("dashboard.users.simpeg.search"), {
+                params: { search: "" },
+            })
+            .then((response) => {
+                if (!active) return;
 
-        return (response.data?.data ?? []).map((user) => ({
-            value: user.id,
-            label: `${user.name} (${user.username})`,
-            ...user,
-        }));
-    };
+                setUsers((response.data?.data ?? []).map((user) => ({
+                    ...user,
+                    id: String(user.id),
+                    value: String(user.id),
+                    label: `${user.name} (${user.username})`,
+                })));
+            })
+            .finally(() => {
+                if (active) setIsLoadingUsers(false);
+            });
+
+        return () => {
+            active = false;
+        };
+    }, []);
 
     return (
         <div>
-            <label className="form-label">{t("Search SIMPEG User")}</label>
-            <AsyncSelect
-                cacheOptions
-                defaultOptions={false}
+            <label className="form-label">{t("Search Employee")}</label>
+            <Select
+                options={users}
+                isLoading={isLoadingUsers}
                 isClearable
                 isOptionDisabled={(option) => option.exists}
-                loadOptions={loadUsers}
+                getOptionValue={(option) => String(option.id)}
+                getOptionLabel={(option) => option.label}
                 value={selectedUser}
-                onChange={onUserChange}
-                placeholder={t("Type name or username...")}
+                onChange={(option) => onUserChange(option)}
+                placeholder={t("Type employee name")}
                 noOptionsMessage={() => t("No users found")}
             />
 

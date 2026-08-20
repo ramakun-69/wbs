@@ -33,7 +33,7 @@ export default function Index({ roles = [] }) {
         email: "",
     });
 
-    const loadTableData = () => {
+    const handleLoadTableData = () => {
         setIsLoading(true);
         axios.get(route("datatable.internal-users"), {
             params: {
@@ -46,12 +46,12 @@ export default function Index({ roles = [] }) {
                 setTableData(response.data.data ?? []);
                 setTotalRows(response.data.total ?? 0);
             })
-            .catch(() => notifyError(t("An unexpected error occurred. Please try again later.")))
+            .catch(() => notifyError(t("An unexpected error occurred. Please try again later."),'bottom-center'))
             .finally(() => setIsLoading(false));
     };
 
     useEffect(() => {
-        loadTableData();
+        handleLoadTableData();
     }, [currentPage, rowsPerPage, search]);
 
     const openCreateModal = () => {
@@ -77,6 +77,8 @@ export default function Index({ roles = [] }) {
 
     const selectedUser = data.simpeg_user_id
         ? {
+            value: data.simpeg_user_id,
+            label: `${data.name} (${data.username})`,
             id: data.simpeg_user_id,
             username: data.username,
             name: data.name,
@@ -85,11 +87,11 @@ export default function Index({ roles = [] }) {
         : null;
 
     const handleSubmitUser = () => {
-        post(route("users.store"), {
+        post(route("dashboard.users.store"), {
             preserveScroll: true,
             onSuccess: (page) => {
                 closeCreateModal();
-                loadTableData();
+                handleLoadTableData();
                 notifySuccess(page.props?.flash?.success ?? t("User added successfully."));
             },
             onError: (formErrors) => {
@@ -99,13 +101,13 @@ export default function Index({ roles = [] }) {
     };
 
     const submitRoles = (roleNames) => {
-        router.put(route("users.roles.update", drawerUser.id), {
+        router.put(route("dashboard.users.roles.update", drawerUser.id), {
             roles: roleNames,
         }, {
             preserveScroll: true,
             onSuccess: (page) => {
                 setDrawerUser(null);
-                loadTableData();
+                handleLoadTableData();
                 notifySuccess(page.props?.flash?.success ?? t("User roles updated successfully."));
             },
             onError: () => notifyError(t("An unexpected error occurred. Please try again later.")),
@@ -130,7 +132,17 @@ export default function Index({ roles = [] }) {
         },
         {
             name: t("Role"),
-            selector: (row) => row.roles?.map((role) => role.name).join(", ") || "-",
+            selector: (row) =>
+                row.roles?.map((role) => role.name).join(", ") || "-",
+            sortable: true,
+        },
+        {
+            name: t("Status"),
+            cell: (row) => (
+                <span className={`badge bg-${row?.is_active ? "success" : "danger"}`}>
+                    {row?.is_active ? t("Active") : t("Inactive")}
+                </span>
+            ),
             sortable: true,
         },
         {
@@ -144,7 +156,11 @@ export default function Index({ roles = [] }) {
                     disabled={isLoading}
                     title={t("Assign Roles")}
                 >
-                    <Icon icon="mdi:shield-key-outline" width="18" height="18" />
+                    <Icon
+                        icon="mdi:shield-key-outline"
+                        width="18"
+                        height="18"
+                    />
                 </Button>
             ),
         },
@@ -177,6 +193,7 @@ export default function Index({ roles = [] }) {
                         data={tableData}
                         progressPending={isLoading}
                         progressComponent={<Loading />}
+                        progressSkeleton={isLoading}
                         noDataComponent={isLoading ? <Loading /> : search ? t("datatable.zeroRecords") : t("datatable.emptyTable")}
                         pagination
                         paginationServer

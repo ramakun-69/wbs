@@ -44,13 +44,20 @@ function formatPlaceDate(place, date) {
 function formatDateTime(date) {
     if (!date) return "-";
 
-    return new Intl.DateTimeFormat(getLocale(), {
+    const value = new Date(date);
+
+    const datePart = new Intl.DateTimeFormat(getLocale(), {
         year: "numeric",
         month: "long",
-       day: "2-digit",
+        day: "2-digit",
+    }).format(value);
+
+    const timePart = new Intl.DateTimeFormat(getLocale(), {
         hour: "2-digit",
         minute: "2-digit",
-    }).format(new Date(date));
+    }).format(value);
+
+    return `${datePart} ${timePart}`;
 }
 
 export {

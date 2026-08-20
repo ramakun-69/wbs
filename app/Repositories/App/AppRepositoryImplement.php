@@ -18,12 +18,12 @@ class AppRepositoryImplement extends Eloquent implements AppRepository
     {
         return $model->create($data);
     }
-    public function insertOneModelWithFile($model, array $data, $fileKey = null, $filePath)
+    public function insertOneModelWithFile($model, array $data, $fileKey = null, $filePath = null, $attribute = null)
     {
         if ($fileKey && request()->hasFile($fileKey)) {
             $file = request()->file($fileKey);
             $fileName = $this->storeFile($file, $filePath);
-            $data[$fileKey] = $fileName;
+            $data[$attribute ?? $fileKey] = $fileName;
         }
         return $model->create($data);
     }
@@ -51,19 +51,23 @@ class AppRepositoryImplement extends Eloquent implements AppRepository
     {
         return $model->update($data);
     }
-    public function updateOneModelWithFile($model, array $data, $key =  null, $filePath)
+    public function updateOneModelWithFile($model, array $data, $key = null, $filePath = null, $attribute = null)
     {
-
         $oldData = $model;
+        $attribute ??= $key;
         $file = request()->file($key);
+
         if ($file != null) {
-            if ($oldData->$key) {
-                $this->deleteFile($oldData->$key);
+            if ($oldData->$attribute) {
+                $this->deleteFile($oldData->$attribute);
             }
             $data[$key] = $file->store($filePath, 'public');
+            $data[$attribute] = $data[$key];
+            unset($data[$key]);
         } else {
-            $data[$key] = $oldData->$key;
+            $data[$attribute] = $oldData->$attribute;
         }
+
         return $oldData->update($data);
     }
     public function deleteOneModel($model)

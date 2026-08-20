@@ -47,10 +47,12 @@ export default function Navbar({ onToggleSidebar }) {
                             </span>
                         </Button>
                         <div className="dropdown-menu dropdown-menu-end">
-                            <Link href="/profile" className="dropdown-item">
-                                <User size={16} className="me-2" />
-                                {t("Profile")}
-                            </Link>
+                            {user?.auth_type == 'local' && 
+                                <Link href={route('dashboard.profile.edit')} className="dropdown-item">
+                                    <User size={16} className="me-2" />
+                                    {t("Profile")}
+                                </Link>
+                            }
                             <Button
                                 type="button"
                                 className="dropdown-item text-danger"

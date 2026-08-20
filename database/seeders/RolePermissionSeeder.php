@@ -27,6 +27,7 @@ class RolePermissionSeeder extends Seeder
             'View Investigation',
             'Execute Investigation',
             'Submit Investigation',
+            'Forward Investigation',
             'Review Investigation',
 
             // Recommendation
@@ -39,6 +40,8 @@ class RolePermissionSeeder extends Seeder
             'View Own Support',
             'Create Support',
             'Manage Users',
+            'Edit Profile',
+            'Manage FAQ',
 
             // Content
             'Manage Content',
@@ -63,7 +66,8 @@ class RolePermissionSeeder extends Seeder
                 'Create Complaint',
                 'View Own Complaint',
                 'View Own Support',
-                'Create Support',
+            'Create Support',
+            'Edit Profile',
             ],
 
             'Admin WBS' => [
@@ -75,12 +79,14 @@ class RolePermissionSeeder extends Seeder
                 'View Support',
                 'View FAQ',
                 'Manage Users',
-                'Manage Content',
+            'Manage Content',
+            'Manage FAQ',
             ],
 
-            'Irban' => [
+            'Irban V' => [
                 'View All Complaints',
                 'Verify Complaint',
+                'Forward Investigation',
                 'View Support',
                 'View FAQ',
             ],

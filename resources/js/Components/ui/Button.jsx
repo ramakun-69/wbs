@@ -1,12 +1,12 @@
 import React from "react";
 import { Icon } from "@iconify/react"; // atau spinner favoritmu
 
-export default function Button({ type, isLoading, children, className = '', loadingType = 1, ...props }) {
+export default function Button({ type, isLoading, disabled = false, children, className = '', loadingType = 1, ...props }) {
     return (
         <button
             type={type}
             className={className}
-            disabled={isLoading}
+            disabled={disabled || isLoading}
             {...props}
         >
             {isLoading ? (

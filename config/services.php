@@ -7,6 +7,7 @@ return [
           'authorize_url' => env('SIMPEG_SSO_AUTHORIZE_URL', env('SIMPEG_SSO_URL').'/oauth/authorize'),
           'token_url' => env('SIMPEG_SSO_TOKEN_URL', env('SIMPEG_SSO_URL').'/oauth/token'),
           'user_url' => env('SIMPEG_SSO_USER_URL', env('SIMPEG_SSO_URL').'/api/user'),
+          'users_url' => env('SIMPEG_SSO_USERS_URL', env('SIMPEG_SSO_URL').'/api/employee-list'),
           'users_token' => env('SIMPEG_SSO_USERS_TOKEN'),
           'logout_url' => env('SIMPEG_SSO_LOGOUT_URL'),
           'prompt' => env('SIMPEG_SSO_PROMPT', 'login'),

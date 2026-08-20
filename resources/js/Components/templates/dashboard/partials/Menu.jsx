@@ -5,46 +5,55 @@ import { route } from "ziggy-js";
 import { Ziggy } from "../../../../ziggy";
 import { useAuth } from "../../../../src/hook/useAuth";
 
-const item = (key, label, icon, permissions, routeName = null, fallbackUrl = "") => ({ key, label, icon, permissions: Array.isArray(permissions) ? permissions : [permissions].filter(Boolean), route: routeName, fallbackUrl, url: "" });
+const item = (key, label, icon, permissions, routeName = null) => ({
+    key,
+    label,
+    icon,
+    permissions: Array.isArray(permissions)
+        ? permissions
+        : [permissions].filter(Boolean),
+    route: routeName,
+});
 
 const MENU_ITEMS = [
-    item("dashboard", "menu.dashboard", LayoutDashboard, [], "dashboard.index", "/dashboard"),
-    item("complaints", "menu.complaints", FileText, ["View All Complaints", "View Own Complaint", "Create Complaint"]),
-    item("reports", "menu.reports", FileBarChart, ["View All Complaints", "Export Complaints"]),
-    item("faq", "menu.faq", HelpCircle, ["View FAQ", "Manage Content"]),
-    item("support", "menu.support", MessageSquare, ["View Support", "Manage Support", "View Own Support", "Create Support"]),
-    item("users", "menu.users", Users, "Manage Users", "users.index", "/users"),
-    item("categories", "menu.categories", FileText, "Manage Content"),
-    item("articles", "menu.articles", BookOpen, "Manage Content"),
+    item("dashboard", "menu.dashboard", LayoutDashboard, [], "dashboard.index"),
+    item("complaints", "menu.complaints", FileText, ["View All Complaints", "View Own Complaint", "Create Complaint", "View Investigation"], "dashboard.complaints.index"),
+    item("reports", "menu.reports", FileBarChart, ["View All Complaints", "Export Complaints"], "dashboard.reports.complaints.index"),
+    item("faq", "menu.faq", HelpCircle, "Manage FAQ", "dashboard.faqs.index"),
+    item("support", "menu.support", MessageSquare, ["View Support", "Manage Support", "View Own Support", "Create Support"], "dashboard.supports.index"),
+    item("users", "menu.users", Users, "Manage Users", "dashboard.users.index"),
+    item("articles", "menu.articles", BookOpen, "Manage Content", "dashboard.articles.index", "/dashboard/articles"),
     item("investigation", "menu.investigation", Wrench, ["View Investigation", "Execute Investigation", "Submit Investigation"]),
     item("assignment", "menu.assignment_letter", ClipboardCheck, "Create Investigation"),
     item("review", "menu.investigation_review", Search, "Review Investigation"),
     item("approval", "menu.recommendation_approval", ShieldCheck, "Approve Recommendation"),
-    item("profile", "menu.profile", UserRound, []),
+    item("categories", "menu.categories", FileText, "Manage Content"),
 ];
 
-function filterItems(items, permissions) {
-    return items.filter((menuItem) => !menuItem.permissions.length || menuItem.permissions.some((permission) => permissions.includes(permission)));
+function filterItems(items, permissions, user) {
+    return items.filter((menuItem) =>
+        menuItem.route
+        && (menuItem.key !== "profile" || user?.auth_type?.toLowerCase() !== "sso")
+        && (!menuItem.permissions.length
+            || menuItem.permissions.some((permission) => permissions.includes(permission)))
+    );
 }
 
 export default function Menu() {
     const { url } = usePage();
     const { t } = useTranslation();
-    const { permissions = [] } = useAuth();
-    const menuItems = filterItems(MENU_ITEMS, permissions);
+    const { permissions = [], user } = useAuth();
+    const menuItems = filterItems(MENU_ITEMS, permissions, user);
 
     return <ul className="side-nav">
         {menuItems.map((item) => {
-            let href = item.fallbackUrl || item.url || "#";
-            if (item.route) {
-                try {
-                    href = route(item.route, undefined, false, Ziggy);
-                } catch {
-                    href = item.fallbackUrl || "#";
-                }
-            }
+            const href = route(item.route, undefined, false, Ziggy);
 
-            const isActive = href !== "#" && (url === href || url.startsWith(`${href}/`));
+           const isActive =
+               href !== "#" &&
+               (item.route === "dashboard.index"
+                   ? url === href
+                   : url === href || url.startsWith(`${href}/`));
             const Icon = item.icon;
 
             return <li key={item.key} className={`side-nav-item ${isActive ? "active" : ""}`}>

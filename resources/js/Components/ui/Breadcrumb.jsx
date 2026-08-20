@@ -49,14 +49,6 @@ const Breadcrumb = ({ title, subtitle }) => {
                             <li className="breadcrumb-item">
                                 <Link href="">{subtitle}</Link>
                             </li>
-                            <div className="mx-1  flex-centered">
-                                <Icon
-                                    className="mt-0"
-                                    icon="tabler:chevron-right"
-                                    height={12}
-                                    width={12}
-                                />
-                            </div>
                         </>
                     )}
                 </ol>

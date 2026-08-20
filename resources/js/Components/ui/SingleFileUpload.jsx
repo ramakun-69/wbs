@@ -4,12 +4,28 @@ import { useTranslation } from "react-i18next";
 
 export default function SingleFileUpload({
     initialFile = null,
+    selectedFile = null,
     onChange = () => {},
+    inputId = "single-file-upload",
+    accept = ".pdf,.doc,.docx,.jpg,.jpeg,.png",
+    maxSize = 100 * 1024 * 1024,
+    disabled = false,
 }) {
     const { t } = useTranslation();
     const [fileData, setFileData] = useState(null);
+    const [fileError, setFileError] = useState("");
 
     useEffect(() => {
+        if (typeof File !== "undefined" && selectedFile instanceof File) {
+            setFileData({
+                name: selectedFile.name,
+                file: selectedFile,
+                url: URL.createObjectURL(selectedFile),
+                existing: false,
+            });
+            return;
+        }
+
         if (!initialFile) return;
 
         setFileData({
@@ -20,12 +36,18 @@ export default function SingleFileUpload({
             url: initialFile,
             existing: true,
         });
-    }, [initialFile]);
+    }, [initialFile, selectedFile]);
 
     const handleChange = (e) => {
         const file = e.target.files?.[0];
 
         if (!file) return;
+        if (file.size > maxSize) {
+            setFileError(t("File size must not exceed 100 MB."));
+            return;
+        }
+
+        setFileError("");
 
         setFileData({
             name: file.name,
@@ -44,34 +66,43 @@ export default function SingleFileUpload({
     return (
         <>
             <label
-                htmlFor="single-file-upload"
-                className="mb-16 border border-neutral-600 fw-medium text-secondary-light px-16 py-12 radius-12 d-inline-flex align-items-center gap-2 bg-hover-neutral-200"
+                htmlFor={inputId}
+                className={`file-upload-trigger ${disabled ? "disabled" : ""}`}
             >
-                <Icon icon="solar:upload-linear" />
-                {t("Select File")}
+                <span className="file-upload-icon">
+                    <Icon icon="solar:cloud-upload-linear" width="22" />
+                </span>
+                <span>
+                    <strong className="d-block">{t("Select File")}</strong>
+                    <small>{t("PDF, DOC, DOCX, JPG, PNG up to 100 MB")}</small>
+                </span>
                 <input
                     hidden
-                    id="single-file-upload"
+                    id={inputId}
                     type="file"
+                    accept={accept}
                     onChange={handleChange}
+                    disabled={disabled}
                 />
             </label>
 
+            {fileError && <div className="text-danger small mb-2">{fileError}</div>}
+
             {fileData && (
-                <ul className="show-uploaded-img-name">
-                    <li className="uploaded-image-name-list text-primary-600 fw-semibold d-flex align-items-center gap-2">
-                        <Icon icon="ph:file-light" />
-
-                        {fileData.name}
-
+                <div className="file-uploaded-item">
+                    {/\.(jpg|jpeg|png|gif|webp)$/i.test(fileData.name) && fileData.url ? (
+                        <img src={fileData.url} alt={fileData.name} className="file-upload-preview" />
+                    ) : (
+                        <Icon icon="ph:file-text" width="20" />
+                    )}
+                    <span className="text-truncate">{fileData.name}</span>
+                    {!disabled && <button type="button" className="file-upload-remove" onClick={removeFile} aria-label={t("Remove")}>
                         <Icon
                             icon="radix-icons:cross-2"
-                            className="text-danger-600"
-                            onClick={removeFile}
-                            style={{ cursor: "pointer" }}
+                            width="18"
                         />
-                    </li>
-                </ul>
+                    </button>}
+                </div>
             )}
         </>
     );

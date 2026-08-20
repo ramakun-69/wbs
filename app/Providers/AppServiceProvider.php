@@ -11,7 +11,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Laravel Easy Repository auto-binds service interfaces to implementations.
     }
 
     /**

@@ -1,5 +1,6 @@
-import { createInertiaApp, router } from "@inertiajs/react";
+import { createInertiaApp } from "@inertiajs/react";
 import { createRoot } from "react-dom/client";
+import "react-quill-new/dist/quill.snow.css";
 import "../css/dashboard/app.scss";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -13,27 +14,18 @@ import "./csrf.js";
 import "./i18n.js";
 import i18n from "./i18n";
 import { route } from "ziggy-js";
-import { Ziggy } from "./ziggy";
 import "../css/datatable.css";
 import "../css/custom.css";
+import "../css/public.css";
 import "./axios";
-import { hideLoading, showLoading } from "./Services/LoadingService.jsx";
 import GlobalLoading from "./Components/ui/GlobalLoading.jsx";
 
 // Expose Ziggy's route helper to all Inertia page components.
-globalThis.route = (name, params, absolute = true) =>
-    route(name, params, absolute, Ziggy);
+globalThis.route = route;
 
 if (typeof window !== "undefined") {
     import("bootstrap/dist/js/bootstrap.bundle.js");
 }
-router.on("start", () => {
-    showLoading();
-});
-
-router.on("finish", () => {
-    hideLoading();
-});
 createInertiaApp({
     resolve: (name) => {
         const pages = import.meta.glob("./Pages/**/*.jsx", { eager: true });
@@ -53,6 +45,9 @@ createInertiaApp({
         );
     },
     progress: {
-        color: "#004543",
+        color: "#166275",
+        delay: 0,
+        showSpinner: false,
+        includeCSS: true,
     },
 });

@@ -17,7 +17,7 @@ class StoreUserRequest extends FormRequest
     {
         $trimmed = [];
 
-        foreach (array_keys($this->fields) as $field) {
+        foreach ($this->fields as $field) {
             if ($this->has($field)) {
                 $trimmed[$field] = is_string($this->input($field))
                     ? trim($this->input($field))

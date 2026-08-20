@@ -7,15 +7,22 @@ use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRolesRequest;
 use App\Models\Role;
 use App\Models\User;
+use App\Services\Sso\SsoService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use Throwable;
 
 class UserController extends Controller
 {
+    public function __construct(
+        private SsoService $ssoService,
+    ) {
+    }
+
     public function index(): Response
     {
         
@@ -32,39 +39,25 @@ class UserController extends Controller
         ]);
     }
 
-    public function searchSimpeg(Request $request): JsonResponse
+    public function searchSimpegUser(Request $request): JsonResponse
     {
         $search = trim((string) $request->query('search', ''));
 
-        if (mb_strlen($search) < 2) {
-            return response()->json(['data' => []]);
-        }
-
-        $client = Http::acceptJson()->timeout(15);
-        $token = config('services.simpeg.users_token');
-
-        if (filled($token)) {
-            $client = $client->withToken($token);
-        }
-
-        $response = $client->get(config('services.simpeg.users_url'), [
-            'search' => $search,
-        ]);
-
-        if ($response->failed()) {
-            report($response->toException());
-
+        try {
+            $items = $this->ssoService->searchUsers($search);
+        } catch (Throwable $exception) {
+            report($exception);
             return response()->json([
-                'message' => 'Daftar user SIMPEG tidak dapat diambil.',
+                'message' => $exception->getMessage(),
             ], 502);
         }
 
-        $items = $response->json('data');
-        $items = is_array($items) ? $items : $response->json();
-        $items = is_array($items) ? $items : [];
-
         $simpegIds = collect($items)
-            ->map(fn ($item) => (string) ($item['id'] ?? $item['user_id'] ?? ''))
+            ->map(fn (array $item) => (string) (
+                $item['id'] ??
+                $item['user_id'] ??
+                ''
+            ))
             ->filter()
             ->values();
 
@@ -74,18 +67,19 @@ class UserController extends Controller
             ->map(fn ($id) => (string) $id)
             ->all();
 
-        $data = collect($items)->map(function (array $item) use ($existingIds) {
-            $id = (string) ($item['id'] ?? $item['user_id'] ?? '');
-            $username = $item['username'] ?? $item['nip'] ?? $item['nik'] ?? '';
-
-            return [
-                'id' => $id,
-                'username' => $username,
-                'name' => $item['name'] ?? $item['full_name'] ?? $username,
-                'email' => $item['email'] ?? null,
-                'exists' => in_array($id, $existingIds, true),
-            ];
-        })->values();
+        $data = collect($items)
+            ->map(function (array $item) use ($existingIds) {
+                $id = (string) ($item['id'] ?? "");
+                $username = $item['username'] ??  $item['nip'];
+                return [
+                    'id' => $id,
+                    'username' => $username,
+                    'name' => $item['name'] ?? '',
+                    'email' => $item['email'] ?? null,
+                    'exists' => in_array($id, $existingIds, true),
+                ];
+            })
+            ->values();
 
         return response()->json(['data' => $data]);
     }
@@ -94,14 +88,17 @@ class UserController extends Controller
     {
         $data = $request->validated();
 
-        $user = User::create([
-            'simpeg_user_id' => $data['simpeg_user_id'],
-            'auth_type' => 'sso',
-            'username' => $data['username'],
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'is_active' => true,
-        ]);
+        try {
+            $this->ssoService->registerUser($data);
+        } catch (Throwable $exception) {
+            report($exception);
+
+            throw ValidationException::withMessages([
+                'simpeg_user_id' => __(
+                    'Application access could not be assigned.'
+                ),
+            ]);
+        }
 
         return back()->with('success', __('User added successfully.'));
     }

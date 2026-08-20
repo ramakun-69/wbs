@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Icon } from "@iconify/react";
 
 import Button from "../../Components/ui/Button";
+import CheckBoxInput from "../../Components/ui/CheckBoxInput";
 
 export default function DrawerPanel({
     show,
@@ -60,13 +61,13 @@ export default function DrawerPanel({
                                 htmlFor={`user-role-${role.id}`}
                                 className="border rounded-3 p-3 mb-3 d-flex align-items-center gap-3 shadow-sm"
                             >
-                                <input
+                                <CheckBoxInput
                                     id={`user-role-${role.id}`}
-                                    type="checkbox"
                                     className="form-check-input mt-0"
                                     checked={checked}
                                     onChange={() => toggleRole(role.name)}
                                     disabled={isLoading}
+                                    errorInput={false}
                                 />
                                 <span className="flex-grow-1 fw-semibold">
                                     {role.name}

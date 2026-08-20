@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use App\Models\User;
 
 class SsoController extends Controller
 {
@@ -85,10 +86,18 @@ class SsoController extends Controller
                 ->timeout(15)
                 ->get(config('services.simpeg.user_url'));
 
-            if ($identityResponse->failed()) {
-                report($identityResponse->toException());
+            if ($identityResponse->status() === 403) {
+                $simpegUserId = $identityResponse->json('simpeg_user_id');
 
-                return redirect()->route('login')->with('error', 'Identitas pengguna SIMPEG tidak dapat diambil.');
+                if ($simpegUserId) {
+                    User::query()
+                        ->where('simpeg_user_id', $simpegUserId)
+                        ->update([
+                            'is_active' => false,
+                        ]);
+                }
+
+                return redirect()->route('login')->with('error', __('You do not have access to the WBS.'));
             }
 
             $identity = $identityResponse->json('data') ?: $identityResponse->json();
