@@ -278,6 +278,7 @@ export default {
         "Contact Us": "Kontak Kami",
         "Public Information": "Informasi Publik",
         "Secure Access": "Akses Aman",
+        "Create Reporter Account": "Buat Akun Pelapor",
         "FAQ": "FAQ",
         "Check the latest status of your complaint without signing in.": "Periksa status terbaru pengaduan tanpa perlu masuk.",
         "Complaint Ticket Number": "Nomor Tiket Pengaduan",

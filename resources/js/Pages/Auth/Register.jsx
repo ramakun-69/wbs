@@ -7,27 +7,20 @@ import Button from "../../Components/ui/Button";
 import "../../../css/auth/login.css";
 import { useTranslation } from "react-i18next";
 
-export default function Register() {
+export function RegisterForm({ compact = false, showLoginLink = true, className = "" }) {
     const { t } = useTranslation();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
-    const { data, setData, post, processing, errors, clearErrors } = useForm({
+    const { data, setData, post, processing, errors, clearErrors, reset } = useForm({
         email: "",
         password: "",
         password_confirmation: "",
     });
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = (event) => {
+        event.preventDefault();
         post(route("register.store"), {
-            onSuccess: (page) => {
-                const error = page.props?.flash?.error;
-                const success = page.props?.flash?.success;
-                reset();
-                handleCloseModal();
-                if (error) notifyError(error, "bottom-center");
-                notifySuccess(success, "bottom-center");
-            },
+            onSuccess: () => reset(),
         });
     };
 
@@ -67,22 +60,16 @@ export default function Register() {
     );
 
     return (
-        <AuthLayout>
-            <div className="text-center mb-4">
-                <span className="auth-mark auth-mark-mobile">
-                    Whistleblowing System{" "}
-                </span>
-                <h2 className="fw-semibold mt-3 mb-2">
-                    {t("Reporter Account Register")}
-                </h2>
-                <p className="text-muted mb-0">
-                    {t("Create an account to submit a report.")}
-                </p>
-            </div>
+        <form className={`${compact ? "public-register-form" : ""} ${className}`.trim()} onSubmit={handleSubmit}>
+            {!compact && <div className="text-center mb-4">
+                <span className="auth-mark auth-mark-mobile">Whistleblowing System</span>
+                <h2 className="fw-semibold mt-3 mb-2">{t("Reporter Account Register")}</h2>
+                <p className="text-muted mb-0">{t("Create an account to submit a report.")}</p>
+            </div>}
 
             <div className="mb-3">
                 <label htmlFor="email" className="form-label">
-                    {t("Email")} <span className="text-muted"></span>
+                    {t("Email")}
                 </label>
                 <TextInput
                     id="email"
@@ -93,7 +80,7 @@ export default function Register() {
                         clearErrors("email");
                         setData("email", event.target.value);
                     }}
-                    placeholder={t("Enter Attribute", {attribute: t("Email")})}
+                    placeholder={t("Enter Attribute", { attribute: t("Email") })}
                     errorMessage={errors.email}
                     autoComplete="email"
                 />
@@ -117,18 +104,21 @@ export default function Register() {
             )}
 
             <Button
-                type="button"
-                onClick={handleSubmit}
+                type="submit"
                 className="btn btn-primary btn-lg w-100"
                 isLoading={processing}
             >
                 {t("Register")}
             </Button>
 
-            <p className="text-center mt-4 mb-0 small text-muted">
+            {showLoginLink && <p className="text-center mt-4 mb-0 small text-muted">
                 {t("Already have an account?")}{" "}
-                <Link href="/login">{t("Login")}</Link>
-            </p>
-        </AuthLayout>
+                <Link href={route("login")}>{t("Login")}</Link>
+            </p>}
+        </form>
     );
+}
+
+export default function Register() {
+    return <AuthLayout><RegisterForm /></AuthLayout>;
 }

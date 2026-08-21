@@ -187,6 +187,7 @@ export default {
         "Contact Us": "Contact Us",
         "Public Information": "Public Information",
         "Secure Access": "Secure Access",
+        "Create Reporter Account": "Create Reporter Account",
         "FAQ": "FAQ",
         "Check the latest status of your complaint without signing in.": "Check the latest status of your complaint without signing in.",
         "Complaint Ticket Number": "Complaint Ticket Number",

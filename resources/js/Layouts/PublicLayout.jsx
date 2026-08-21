@@ -13,7 +13,6 @@ export default function PublicLayout({ children }) {
             <div className="public-container d-flex justify-content-between align-items-center gap-3">
                 <span><MapPin size={15} /> Jl. Jenderal Ahmad Yani Kisaran</span>
                 <span><Phone size={15} /> +62 813-6790-4334</span>
-                <span className="d-none d-md-inline fw-semibold">F A Q</span>
                 <div className="d-flex gap-3 d-none d-lg-flex"><Facebook size={16} /><Twitter size={16} /><Instagram size={16} /></div>
             </div>
         </div>
@@ -37,7 +36,6 @@ export default function PublicLayout({ children }) {
             <div className="public-container public-footer-grid">
                 <div><h6>{t("Contact Us")}</h6><p>Jl. Jend. Ahmad Yani<br />+62 813-6790-4334<br />Senin–Kamis · 07.30–16.00<br />Jumat · 07.30–11.00</p></div>
                 <div className="text-center"><img src={logo} alt="Logo" /><p>Copyright 2026 © Inspektorat Kab. Asahan</p></div>
-                <div><h6>{t("Public Information")}</h6><p>{t("Complaint Tracking")}<br />{t("Articles")}<br />{t("FAQ")}</p></div>
             </div>
         </footer>
     </div>;
