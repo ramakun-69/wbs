@@ -18,4 +18,9 @@ class Article extends Model
         'is_published' => 'boolean',
         'published_at' => 'datetime',
     ];
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
 }
