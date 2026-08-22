@@ -289,5 +289,12 @@
     "Complete Complaint": "Complete Complaint",
     "Support status updated successfully.": "Support status updated successfully.",
     "Support Status": "Support Status",
-    "Closed support tickets cannot receive replies.": "Closed support tickets cannot receive replies."
+    "Closed support tickets cannot receive replies.": "Closed support tickets cannot receive replies.",
+    "The SSO session is invalid or has expired.": "The SSO session is invalid or has expired.",
+    "SSO login was cancelled.": "SSO login was cancelled.",
+    "The SSO authorization code was not found.": "The SSO authorization code was not found.",
+    "SIMPEG could not provide an access token.": "SIMPEG could not provide an access token.",
+    "The SIMPEG access token was not found.": "The SIMPEG access token was not found.",
+    "Your WBS account is inactive.": "Your WBS account is inactive.",
+    "SIMPEG could not be reached.": "SIMPEG could not be reached."
 }

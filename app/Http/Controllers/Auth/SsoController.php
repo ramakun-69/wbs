@@ -48,15 +48,15 @@ class SsoController extends Controller
         $oauth = $request->session()->pull('sso.oauth');
 
         if (!$oauth || !hash_equals($oauth['state'], (string) $request->query('state'))) {
-            return redirect()->route('login')->with('error', 'Sesi SSO tidak valid atau sudah kedaluwarsa.');
+            return redirect()->route('login')->with('error', __('The SSO session is invalid or has expired.'));
         }
 
         if ($request->filled('error')) {
-            return redirect()->route('login')->with('error', $request->query('error_description', 'Login SSO dibatalkan.'));
+            return redirect()->route('login')->with('error', $request->query('error_description', __('SSO login was cancelled.')));
         }
 
         if (!$request->filled('code')) {
-            return redirect()->route('login')->with('error', 'Authorization code SSO tidak ditemukan.');
+            return redirect()->route('login')->with('error', __('The SSO authorization code was not found.'));
         }
 
         try {
@@ -73,12 +73,12 @@ class SsoController extends Controller
                 ]);
             if ($tokenResponse->failed()) {
                 report($tokenResponse->toException());
-                return redirect()->route('login')->with('error', 'SIMPEG gagal memberikan access token.');
+                return redirect()->route('login')->with('error', __('SIMPEG could not provide an access token.'));
             }
 
             $accessToken = $tokenResponse->json('access_token');
             if (!$accessToken) {
-                return redirect()->route('login')->with('error', 'Access token SIMPEG tidak ditemukan.');
+                return redirect()->route('login')->with('error', __('The SIMPEG access token was not found.'));
             }
 
             $identityResponse = Http::withToken($accessToken)
@@ -104,7 +104,7 @@ class SsoController extends Controller
             $user = $this->ssoService->provisionUser($identity);
 
             if (!$user->is_active) {
-                return redirect()->route('login')->with('error', 'Akun WBS Anda tidak aktif.');
+                return redirect()->route('login')->with('error', __('Your WBS account is inactive.'));
             }
 
             Auth::login($user);
@@ -115,7 +115,7 @@ class SsoController extends Controller
         } catch (ConnectionException $exception) {
             report($exception);
 
-            return redirect()->route('login')->with('error', 'SIMPEG tidak dapat dihubungi.');
+            return redirect()->route('login')->with('error', __('SIMPEG could not be reached.'));
         }
     }
 
