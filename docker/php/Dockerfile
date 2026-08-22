@@ -1,6 +1,8 @@
 FROM php:8.4-fpm
 
 # Install dependencies
+FROM php:8.4-fpm
+
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -17,6 +19,7 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libpq-dev \
+    libssl-dev \
     && docker-php-ext-configure gd \
     --with-freetype \
     --with-jpeg \
@@ -29,7 +32,10 @@ RUN apt-get update && apt-get install -y \
     intl \
     opcache \
     pcntl \
-    zip
+    zip \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
