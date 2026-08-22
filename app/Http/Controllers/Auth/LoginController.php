@@ -42,7 +42,7 @@ class LoginController extends Controller
     public function logout(): RedirectResponse
     {
         $isSsoUser = Auth::user()?->auth_type === 'sso';
-        $ssoLogoutUrl = config('services.simpeg.logout_url');
+        $ssoLogoutUrl = config('services.simpeg.base_url'). '/oauth/logout';
 
         Auth::logout();
         request()->session()->invalidate();
