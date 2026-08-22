@@ -730,6 +730,9 @@ export default {
         "Close Ticket": "Tutup Tiket",
         "Support status updated successfully.": "Status bantuan berhasil diperbarui.",
         "Closed support tickets cannot receive replies.": "Tiket bantuan yang ditutup tidak dapat menerima balasan.",
-        "This support ticket is closed and cannot receive replies.": "Tiket bantuan ini sudah ditutup dan tidak dapat menerima balasan."
+        "This support ticket is closed and cannot receive replies.": "Tiket bantuan ini sudah ditutup dan tidak dapat menerima balasan.",
+        "SIMPEG token request failed." : "Permintaan Token SIMPEG Gagal.",
+        "SIMPEG access token is missing." : "Token akses SIMPEG tidak di temukan.",
+        "SIMPEG user list request failed." : "Permintaan daftar pengguna SIMPEG gagal."
     }
 }

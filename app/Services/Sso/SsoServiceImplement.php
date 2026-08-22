@@ -87,19 +87,19 @@ class SsoServiceImplement extends ServiceApi implements SsoService
         $tokenResponse = Http::asForm()
             ->acceptJson()
             ->timeout(15)
-            ->post(config('services.simpeg.token_url'), [
+            ->post(config('services.simpeg.base_url'). '/oauth/token', [
                 'grant_type' => 'client_credentials',
                 'client_id' => config('services.simpeg.client_id'),
                 'client_secret' => config('services.simpeg.client_secret'),
             ]);
         if ($tokenResponse->failed()) {
-            throw new RuntimeException('SIMPEG token request failed.');
+            throw new RuntimeException(__('SIMPEG token request failed.'));
         }
 
         $accessToken = $tokenResponse->json('access_token');
 
         if (!filled($accessToken)) {
-            throw new RuntimeException('SIMPEG access token is missing.');
+            throw new RuntimeException(__('SIMPEG access token is missing.'));
         }
 
         $response = Http::withToken($accessToken)
@@ -111,7 +111,7 @@ class SsoServiceImplement extends ServiceApi implements SsoService
             );
 
         if ($response->failed()) {
-            throw new RuntimeException('SIMPEG user list request failed.');
+            throw new RuntimeException(__('SIMPEG user list request failed.'));
         }
 
         $items = $response->json('data');

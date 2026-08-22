@@ -238,7 +238,7 @@
     "SIMPEG could not provide an access token.": "SIMPEG gagal memberikan token akses.",
     "The SIMPEG access token was not found.": "Token akses SIMPEG tidak ditemukan.",
     "Your WBS account is inactive.": "Akun WBS Anda tidak aktif.",
-    "SIMPEG could not be reached.": "SIMPEG tidak dapat dihubungi.",
+    "SIMPEG could not be reached.": "SIMPEG tidak dapat terhubung.",
     "Token not found": "Token Not Found",
     "Your access to the WBS has been revoked.": "Akses Anda ke WBS sudah dicabut.",
     "Complaint Title": "Judul Pengaduan",

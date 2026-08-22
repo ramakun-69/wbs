@@ -13,9 +13,7 @@ use App\Models\User;
 
 class SsoController extends Controller
 {
-    public function __construct(protected SsoService $ssoService)
-    {
-    }
+    public function __construct(protected SsoService $ssoService) {}
 
     public function redirect(Request $request)
     {
@@ -38,9 +36,9 @@ class SsoController extends Controller
             'state' => $state,
             'code_challenge' => $codeChallenge,
             'code_challenge_method' => 'S256',
-        ], static fn ($value) => filled($value)));
+        ], static fn($value) => filled($value)));
 
-        return redirect()->away(config('services.simpeg.authorize_url').'?'.$query);
+        return redirect()->away(config('services.simpeg.base_url') . '/oauth/authorize?' . $query);
     }
 
     public function callback(Request $request)
@@ -63,7 +61,7 @@ class SsoController extends Controller
             $tokenResponse = Http::asForm()
                 ->acceptJson()
                 ->timeout(15)
-                ->post(config('services.simpeg.token_url'), [
+                ->post(config('services.simpeg.base_url') . '/oauth/token', [
                     'grant_type' => 'authorization_code',
                     'client_id' => config('services.simpeg.client_id'),
                     'client_secret' => config('services.simpeg.client_secret'),
@@ -84,7 +82,7 @@ class SsoController extends Controller
             $identityResponse = Http::withToken($accessToken)
                 ->acceptJson()
                 ->timeout(15)
-                ->get(config('services.simpeg.user_url'));
+                ->get(config('services.simpeg.base_url') . '/api/user');
 
             if ($identityResponse->status() === 403) {
                 $simpegUserId = $identityResponse->json('simpeg_user_id');
@@ -118,5 +116,4 @@ class SsoController extends Controller
             return redirect()->route('login')->with('error', __('SIMPEG could not be reached.'));
         }
     }
-
 }
